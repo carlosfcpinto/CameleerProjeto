@@ -1,0 +1,47 @@
+module MaxIndexSum
+
+use int.Int
+use ref.Ref
+use array.Array
+
+(*let max_sum (a:array int) (n:int) : (int,int) = *) 
+
+let rmax_sum (a:array int) (n:int) : (int, int)
+	requires { n = length a}
+	requires {forall i. 0 <= i < n -> a[i] >= 0}
+	ensures {let(sum,max_index) = result in sum <= n * a[max_index]}
+  returns {sum, max_index -> sum <= n * a[max_index] /\ forall i. 0 <= i < n -> a[i] <= a[max_index] /\ (0 <= max_index <= n)}
+
+	= let sum = ref 0 in
+	let max_index = ref 0 in
+	for i = 0 to n-1 do 
+	invariant { !sum <= i * a[!max_index]}
+	invariant { 0 <= !max_index <= i}
+	invariant { forall j. 0 <= j < i -> a[j] <= a[!max_index]}
+		if a[!max_index] < a[i] then max_index := i;
+		sum := !sum + a[i]
+	done; 
+	!sum, !max_index
+
+let max_sum2 (a: array int) (n:int) : (int,int, int)
+	requires { n = length a}
+	requires {forall i. 0 <= i < n -> a[i] >= 0}
+	ensures {let(sum,max, max_index) = result in sum <= n * max}
+    returns {sum, max, max_index -> sum <= n * max /\ (forall i. 0 <= i < n -> a[i] <= max)} 
+    returns {sum, max, max_index -> (n=0 /\ max = 0) \/ (a[max_index] = max /\ 0 <= max_index< n)}
+  = let sum = ref 0 in
+	let max = ref 0 in
+	let max_index = ref 0 in
+	for i = 0 to n-1 do 
+	invariant { !sum <= i * !max }
+	invariant {forall j. 0 <= j < i -> a[j]<= !max}
+	invariant { (i<=0 /\ !max = 0) \/ (0 <= !max_index <= i /\ a[!max_index] = !max) }
+		if !max < a[i] then begin 
+		max := a[i];
+		max_index := i
+		end;
+		sum := !sum + a[i]
+	done; 
+	!sum, !max, !max_index
+
+end 

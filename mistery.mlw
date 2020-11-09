@@ -1,0 +1,25 @@
+module Mistery
+
+use int.Int
+use ref.Ref
+use int.Power
+use int.ComputerDivision
+
+lemma Power_sub : forall x: int, n m: int. 0 <= m -> m <= n ->
+    power x (n-m) = (div (power x n)  (power x m))
+
+let f (n:int) (x0: int):(exp:int)
+requires { x0>0 }
+ensures { exp = power n x0 }
+= let ref r = 1 in
+  let ref x = x0 in
+  while x <> 0 do
+    variant {x}
+    (*invariant {x >= 0 /\ r * power n x = power n x0}*)
+    invariant { x >= 0 /\ r = power n (x0-x)}
+    r <- r * n;
+    x <- x - 1
+  done;
+  r
+
+end

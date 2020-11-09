@@ -1,0 +1,43 @@
+theory MaxIndexSum
+  (* use why3.BuiltIn.BuiltIn *)
+
+  (* use why3.Bool.Bool *)
+
+  (* use why3.Unit.Unit *)
+
+  (* use int.Int *)
+
+  (* use ref.Ref *)
+
+  (* use array.Array *)
+
+  (* use why3.Tuple2.Tuple2 *)
+
+  goal max_sum'vc :
+    forall a:array int, n:int.
+     n = length a /\ (forall i:int. 0 <= i /\ i < n -> a[i] >= 0) ->
+     (let o = n - 1 in
+      (0 <= (o + 1) ->
+       0 <= (0 * a[0]) /\
+       (forall max:int, sum:int.
+         (forall i:int.
+           (0 <= i /\ i <= o) /\ sum <= (i * a[max]) ->
+           (0 <= i /\ i < length a) /\
+           (0 <= max /\ max < length a) /\
+           (if a[max] < a[i]
+            then forall max1:int.
+                  max1 = i ->
+                  (0 <= i /\ i < length a) /\
+                  (forall sum1:int.
+                    sum1 = (sum + a[i]) -> sum1 <= ((i + 1) * a[max1]))
+            else (0 <= i /\ i < length a) /\
+                 (forall sum1:int.
+                   sum1 = (sum + a[i]) -> sum1 <= ((i + 1) * a[max])))) /\
+         (sum <= ((o + 1) * a[max]) ->
+          (sum <= (n * a[max]) /\ (max <= n \/ max = (- 1))) &&
+          sum <= (n * a[max]) /\ (max <= n \/ max = (- 1))))) /\
+      (0 > (o + 1) ->
+       (0 <= (n * a[0]) /\ (0 <= n \/ 0 = (- 1))) &&
+       0 <= (n * a[0]) /\ (0 <= n \/ 0 = (- 1))))
+end
+

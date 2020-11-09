@@ -1,0 +1,46 @@
+module BinRemNode
+
+use int.Int
+use binTree.Tree
+use binTree.Occ
+use binTree.Size
+use option.Option
+
+predicate binsearch (t:tree int) =
+match t with 
+|Empty -> true
+|Node a b c -> (forall i: int. mem i a -> i<=b) /\ (forall j: int. mem j c -> j > b)
+                /\ binsearch a /\ binsearch c
+end
+
+let rec find_min (t: tree int): option (int)
+variant {t}
+requires {binsearch t}
+returns{|None -> size t = 0
+        |Some result -> ((forall i: int. mem i t -> i >= result) /\ mem result t) }
+= match t with
+| Empty -> None
+| Node Empty x _ -> Some x
+| Node l _ _ -> find_min l
+end
+
+let rec delete (t: tree int) (x:int): (tree int)
+requires {binsearch t}
+variant {t}
+ensures {(if occ x t = 0 then size result = size t else size result = size t -1 && occ x result = occ x t -1) 
+         /\ binsearch result}
+= 
+match t with 
+| Empty -> Empty
+| Node l y r ->  if x < y then Node (delete l x) y r else 
+                if x > y then Node l y (delete r x) else
+                if size l = 0 then r else
+                let min = find_min r  in
+                match min with
+                | None -> l
+                | Some min -> Node l min (delete r min)
+end
+end
+
+
+end

@@ -1,0 +1,24 @@
+module ElementInArray
+
+  use int.Int
+  use ref.Ref
+  use array.Array
+
+  exception Duplicate
+
+  let elinarray (a: array int) (m: int) : (found: bool)
+    requires { 0 <= m }
+    requires { forall i: int. 0 <= i < length a -> 0 <= a[i]}
+    ensures  {if found then exists i. 0 <= i < length a /\ a[i] = m
+              else forall i. 0 <= i < length a -> a[i] <> m}
+  =
+   try
+     for k = 0 to Array.length a - 1 do
+     invariant { forall i. 0 <= i < k -> a[i] <> m}
+       if (a[k] = m) then raise Duplicate;
+     done;
+     False
+   with Duplicate ->
+     True
+    end
+end

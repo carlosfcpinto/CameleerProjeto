@@ -1,0 +1,43 @@
+module BinFindNode
+
+  use int.Int
+  use binTree.Tree
+  use binTree.Occ
+  use int.Int
+  use int.MinMax
+
+  let rec function max2 (t: tree int) (z:int): int = match t with
+    | Empty      -> z
+    | Node l a r -> max a (max (max2 l a) (max2 r a))
+  end
+  
+  let rec function min2 (t: tree int) (z:int) : int = match t with
+    | Empty      -> z
+    | Node l a r -> min a (min (min2 l a) (min2 r a))
+  end
+  
+  predicate binsearch (t: tree int) =
+  match t with
+  |Empty -> true
+  |Node a b c -> b >= max2 a 0 /\ b < min2 c 0 /\ binsearch a /\ binsearch c
+  end
+  
+  predicate binarysearch (t:tree int) =
+  match t with
+  |Empty -> true 
+  |Node a b c -> (forall i: int. mem i a -> i<=b) /\ (forall j: int. mem j c -> j > b) 
+                /\ binarysearch a /\ binarysearch c 
+  end
+  
+  let rec findNode (t: tree int) (b:int): bool
+  requires {binarysearch t}
+  variant{t}
+  ensures{result = mem b t}
+  =
+  match t with
+  |Empty -> false
+  |Node l a r ->if (a=b) then (true) else 
+                (if a > b then findNode l b else findNode r b)
+  end
+
+end
