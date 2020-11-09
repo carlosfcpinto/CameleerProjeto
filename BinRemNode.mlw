@@ -27,8 +27,7 @@ end
 let rec delete (t: tree int) (x:int): (tree int)
 requires {binsearch t}
 variant {t}
-ensures {(if occ x t = 0 then size result = size t else size result = size t -1 && occ x result = occ x t -1) 
-        /\ binsearch result}
+ensures {(forall j : int. mem j t /\ j <> x -> mem j result) /\ (forall i:int. mem i result -> mem i t) /\ not mem x result /\ binsearch result}
 = 
 match t with 
 | Empty -> Empty
