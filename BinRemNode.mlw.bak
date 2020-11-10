@@ -15,7 +15,7 @@ end
 
 let rec find_min (t: tree int): (x: int, y: tree int)
 variant {t}
-requires {binsearch t /\ t <> Empty /\ forall j: int. occ j t <= 1}
+requires {binsearch t /\ t <> Empty}
 ensures {(forall i : int. mem i t -> i >= x) /\ mem x t /\ binsearch y 
         /\ (forall j : int. mem j t /\ j <> x -> mem j y) 
         /\ (forall z : int. mem z y -> mem z t) /\ not mem x y 
