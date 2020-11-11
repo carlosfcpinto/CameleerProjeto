@@ -13,6 +13,16 @@ match t with
                 /\ binsearch a /\ binsearch c
 end
 
+let rec function min (t: tree int) : int 
+    variant{t}
+    requires{t <> Empty /\ binsearch t}
+    ensures {forall i:int. mem i t -> result <= i}
+    = match t with
+    | Empty -> absurd
+    | Node l a _ -> min l
+    | Node Empty a _ -> a
+    end
+
 let rec find_min (t: tree int): (x: int, y: tree int)
 variant {t}
 requires {binsearch t /\ t <> Empty /\ forall j: int. occ j t <= 1}
