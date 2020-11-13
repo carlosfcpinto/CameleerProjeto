@@ -3,147 +3,431 @@
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="6">
 <prover id="0" name="Alt-Ergo" version="2.3.3" timelimit="5" steplimit="0" memlimit="1000"/>
-<prover id="2" name="CVC4" version="1.7" timelimit="5" steplimit="0" memlimit="1000"/>
-<file format="whyml" proved="true">
+<prover id="1" name="Z3" version="4.8.6" timelimit="30" steplimit="0" memlimit="4000"/>
+<prover id="2" name="CVC4" version="1.7" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="whyml">
 <path name=".."/><path name="BinRemNode.mlw"/>
-<theory name="BinRemNode" proved="true">
- <goal name="find_min&#39;vc" expl="VC for find_min" proved="true">
- <transf name="split_vc" proved="true" >
-  <goal name="find_min&#39;vc.0" expl="variant decrease" proved="true">
-  <proof prover="0"><result status="valid" time="0.01" steps="65"/></proof>
+<theory name="BinRemNode">
+ <goal name="min&#39;vc" expl="VC for min">
+ <transf name="split_vc" >
+  <goal name="min&#39;vc.0" expl="unreachable point" proved="true">
+  <proof prover="0"><result status="valid" time="0.00" steps="6"/></proof>
   </goal>
-  <goal name="find_min&#39;vc.1" expl="precondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.00" steps="8"/></proof>
+  <goal name="min&#39;vc.1" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.01" steps="16"/></proof>
   </goal>
-  <goal name="find_min&#39;vc.2" expl="postcondition" proved="true">
+  <goal name="min&#39;vc.2" expl="precondition">
   <proof prover="0"><result status="timeout" time="5.00"/></proof>
-  <proof prover="2"><result status="timeout" time="5.00" steps="2073822"/></proof>
-  <transf name="split_vc" proved="true" >
-   <goal name="find_min&#39;vc.2.0" expl="postcondition" proved="true">
-   <proof prover="0"><result status="valid" time="0.06" steps="563"/></proof>
+  <proof prover="1" timelimit="1" memlimit="1000"><result status="highfailure" time="0.74" steps="874638"/></proof>
+  <proof prover="2"><result status="timeout" time="1.00" steps="323016"/></proof>
+  <transf name="split_vc" >
+   <goal name="min&#39;vc.2.0" expl="precondition">
+   <proof prover="1"><result status="timeout" time="30.00" steps="56539533"/></proof>
+   <proof prover="2" timelimit="30" memlimit="4000"><result status="timeout" time="30.00" steps="11906157"/></proof>
    </goal>
-   <goal name="find_min&#39;vc.2.1" expl="postcondition" proved="true">
-   <proof prover="0"><result status="valid" time="3.29" steps="9884"/></proof>
-   </goal>
-   <goal name="find_min&#39;vc.2.2" expl="postcondition" proved="true">
-   <proof prover="0"><result status="valid" time="0.43" steps="2912"/></proof>
-   </goal>
-  </transf>
-  </goal>
- </transf>
- </goal>
- <goal name="delete&#39;vc" expl="VC for delete" proved="true">
- <transf name="split_vc" proved="true" >
-  <goal name="delete&#39;vc.0" expl="variant decrease" proved="true">
-  <proof prover="0"><result status="valid" time="0.01" steps="46"/></proof>
-  </goal>
-  <goal name="delete&#39;vc.1" expl="precondition" proved="true">
-  <transf name="split_vc" proved="true" >
-   <goal name="delete&#39;vc.1.0" expl="precondition" proved="true">
-   <proof prover="0"><result status="valid" time="0.00" steps="10"/></proof>
-   </goal>
-   <goal name="delete&#39;vc.1.1" expl="precondition" proved="true">
-   <proof prover="0"><result status="valid" time="1.63" steps="5816"/></proof>
+   <goal name="min&#39;vc.2.1" expl="precondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.02" steps="3984"/></proof>
    </goal>
   </transf>
   </goal>
-  <goal name="delete&#39;vc.2" expl="variant decrease" proved="true">
-  <proof prover="0"><result status="valid" time="0.01" steps="48"/></proof>
+  <goal name="min&#39;vc.3" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.01" steps="16"/></proof>
   </goal>
-  <goal name="delete&#39;vc.3" expl="precondition" proved="true">
-  <transf name="split_vc" proved="true" >
-   <goal name="delete&#39;vc.3.0" expl="precondition" proved="true">
-   <proof prover="0"><result status="valid" time="0.00" steps="12"/></proof>
-   </goal>
-   <goal name="delete&#39;vc.3.1" expl="precondition" proved="true">
-   <proof prover="0"><result status="valid" time="0.42" steps="1907"/></proof>
-   </goal>
-  </transf>
+  <goal name="min&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.01" steps="11"/></proof>
   </goal>
-  <goal name="delete&#39;vc.4" expl="precondition" proved="true">
-  <proof prover="0"><result status="valid" time="0.01" steps="14"/></proof>
-  </goal>
-  <goal name="delete&#39;vc.5" expl="variant decrease" proved="true">
-  <proof prover="0"><result status="valid" time="0.01" steps="71"/></proof>
-  </goal>
-  <goal name="delete&#39;vc.6" expl="precondition" proved="true">
-  <transf name="split_vc" proved="true" >
-   <goal name="delete&#39;vc.6.0" expl="precondition" proved="true">
-   <proof prover="0"><result status="valid" time="0.01" steps="17"/></proof>
-   </goal>
-   <goal name="delete&#39;vc.6.1" expl="precondition" proved="true">
-   <proof prover="0"><result status="valid" time="2.23" steps="5909"/></proof>
-   </goal>
-  </transf>
-  </goal>
-  <goal name="delete&#39;vc.7" expl="postcondition" proved="true">
-  <transf name="split_vc" proved="true" >
-   <goal name="delete&#39;vc.7.0" expl="postcondition" proved="true">
-   <transf name="split_vc" proved="true" >
-    <goal name="delete&#39;vc.7.0.0" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="0.00" steps="12"/></proof>
-    </goal>
-    <goal name="delete&#39;vc.7.0.1" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="0.76" steps="3234"/></proof>
-    </goal>
-    <goal name="delete&#39;vc.7.0.2" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="1.69" steps="4058"/></proof>
-    </goal>
-    <goal name="delete&#39;vc.7.0.3" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="0.01" steps="76"/></proof>
-    </goal>
-    <goal name="delete&#39;vc.7.0.4" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="4.52" steps="13063"/></proof>
-    </goal>
-   </transf>
-   </goal>
-   <goal name="delete&#39;vc.7.1" expl="postcondition" proved="true">
-   <transf name="split_vc" proved="true" >
-    <goal name="delete&#39;vc.7.1.0" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="0.00" steps="10"/></proof>
-    </goal>
-    <goal name="delete&#39;vc.7.1.1" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="0.34" steps="1645"/></proof>
-    </goal>
-    <goal name="delete&#39;vc.7.1.2" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="0.56" steps="1867"/></proof>
-    </goal>
-    <goal name="delete&#39;vc.7.1.3" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="0.01" steps="78"/></proof>
-    </goal>
-    <goal name="delete&#39;vc.7.1.4" expl="postcondition" proved="true">
-    <transf name="split_vc" proved="true" >
-     <goal name="delete&#39;vc.7.1.4.0" expl="postcondition" proved="true">
-     <proof prover="0"><result status="valid" time="0.01" steps="83"/></proof>
-     </goal>
-     <goal name="delete&#39;vc.7.1.4.1" expl="postcondition" proved="true">
-     <proof prover="0"><result status="valid" time="3.16" steps="11471"/></proof>
+  <goal name="min&#39;vc.5" expl="postcondition">
+  <proof prover="0"><result status="timeout" time="5.00"/></proof>
+  <proof prover="1" timelimit="1" memlimit="1000"><result status="timeout" time="1.00" steps="873138"/></proof>
+  <proof prover="2"><result status="timeout" time="1.00" steps="281743"/></proof>
+  <transf name="split_vc" >
+   <goal name="min&#39;vc.5.0" expl="postcondition">
+   <proof prover="1" timelimit="5" memlimit="2000"><result status="timeout" time="5.00" steps="919696"/></proof>
+   <proof prover="2" timelimit="5" memlimit="2000"><result status="timeout" time="5.00" steps="1690094"/></proof>
+   <transf name="inline_goal" >
+    <goal name="min&#39;vc.5.0.0" expl="postcondition">
+    <transf name="split_all_full" >
+     <goal name="min&#39;vc.5.0.0.0" expl="postcondition">
+     <proof prover="1"><undone/></proof>
+     <proof prover="2" timelimit="30" memlimit="4000"><result status="timeout" time="25.88" steps="10361745"/></proof>
      </goal>
     </transf>
     </goal>
    </transf>
    </goal>
-   <goal name="delete&#39;vc.7.2" expl="postcondition" proved="true">
-   <transf name="split_vc" proved="true" >
-    <goal name="delete&#39;vc.7.2.0" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="0.01" steps="16"/></proof>
-    </goal>
-    <goal name="delete&#39;vc.7.2.1" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="0.36" steps="1316"/></proof>
-    </goal>
-    <goal name="delete&#39;vc.7.2.2" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="0.46" steps="1485"/></proof>
-    </goal>
-    <goal name="delete&#39;vc.7.2.3" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="0.01" steps="42"/></proof>
-    </goal>
-    <goal name="delete&#39;vc.7.2.4" expl="postcondition" proved="true">
-    <proof prover="0"><result status="valid" time="0.60" steps="3289"/></proof>
+   <goal name="min&#39;vc.5.1" expl="postcondition">
+   <proof prover="1" timelimit="5" memlimit="2000"><result status="timeout" time="5.00" steps="935189"/></proof>
+   <proof prover="2" timelimit="5" memlimit="2000"><result status="timeout" time="5.00" steps="1951567"/></proof>
+   <transf name="inline_goal" >
+    <goal name="min&#39;vc.5.1.0" expl="postcondition">
+    <transf name="split_all_full" >
+     <goal name="min&#39;vc.5.1.0.0" expl="postcondition">
+     <proof prover="1" timelimit="5" memlimit="2000"><result status="timeout" time="5.00" steps="940157"/></proof>
+     <proof prover="2" timelimit="30" memlimit="4000"><undone/></proof>
+     </goal>
+    </transf>
     </goal>
    </transf>
    </goal>
-   <goal name="delete&#39;vc.7.3" expl="postcondition" proved="true">
-   <proof prover="0"><result status="valid" time="2.49" steps="12025"/></proof>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="find_min&#39;vc" expl="VC for find_min">
+ <transf name="split_vc" >
+  <goal name="find_min&#39;vc.0" expl="unreachable point">
+  <proof prover="2" obsolete="true"><result status="valid" time="0.02" steps="3875"/></proof>
+  </goal>
+  <goal name="find_min&#39;vc.1" expl="variant decrease">
+  <proof prover="2" obsolete="true"><result status="valid" time="0.03" steps="6668"/></proof>
+  </goal>
+  <goal name="find_min&#39;vc.2" expl="precondition">
+  <transf name="split_vc" >
+   <goal name="find_min&#39;vc.2.0" expl="precondition">
+   <proof prover="2" obsolete="true"><result status="valid" time="0.02" steps="5897"/></proof>
+   </goal>
+   <goal name="find_min&#39;vc.2.1" expl="precondition">
+   <proof prover="2" obsolete="true"><result status="valid" time="0.02" steps="5425"/></proof>
+   </goal>
+   <goal name="find_min&#39;vc.2.2" expl="precondition">
+   <proof prover="1" timelimit="1" memlimit="1000" obsolete="true"><result status="valid" time="0.12" steps="244268"/></proof>
+   <proof prover="2" obsolete="true"><result status="timeout" time="1.00" steps="78497"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="find_min&#39;vc.3" expl="postcondition">
+  <transf name="split_vc" >
+   <goal name="find_min&#39;vc.3.0" expl="postcondition">
+   <transf name="split_vc" >
+    <goal name="find_min&#39;vc.3.0.0" expl="postcondition">
+    <transf name="split_vc" >
+     <goal name="find_min&#39;vc.3.0.0.0" expl="postcondition">
+     <transf name="inline_goal" >
+      <goal name="find_min&#39;vc.3.0.0.0.0" expl="postcondition">
+      <transf name="split_all_full" >
+       <goal name="find_min&#39;vc.3.0.0.0.0.0" expl="postcondition">
+       <transf name="inline_goal" >
+        <goal name="find_min&#39;vc.3.0.0.0.0.0.0" expl="postcondition">
+        <proof prover="0" obsolete="true"><result status="valid" time="0.04" steps="184"/></proof>
+        <proof prover="1" obsolete="true"><result status="highfailure" time="24.10" steps="25623816"/></proof>
+        <proof prover="2" timelimit="30" memlimit="4000" obsolete="true"><result status="timeout" time="30.00" steps="9532337"/></proof>
+        </goal>
+       </transf>
+       </goal>
+      </transf>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="find_min&#39;vc.3.0.1" expl="postcondition">
+    <transf name="split_vc" >
+     <goal name="find_min&#39;vc.3.0.1.0" expl="postcondition">
+     <transf name="inline_goal" >
+      <goal name="find_min&#39;vc.3.0.1.0.0" expl="postcondition">
+      <transf name="split_all_full" >
+       <goal name="find_min&#39;vc.3.0.1.0.0.0" expl="postcondition">
+       <proof prover="0" obsolete="true"><result status="valid" time="0.91" steps="2148"/></proof>
+       <transf name="inline_goal" >
+        <goal name="find_min&#39;vc.3.0.1.0.0.0.0" expl="postcondition">
+        <proof prover="0" obsolete="true"><result status="valid" time="0.97" steps="2230"/></proof>
+        <proof prover="1" obsolete="true"><result status="highfailure" time="24.22" steps="31849304"/></proof>
+        <proof prover="2" timelimit="30" memlimit="4000" obsolete="true"><result status="timeout" time="30.00" steps="8587474"/></proof>
+        </goal>
+       </transf>
+       </goal>
+      </transf>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="find_min&#39;vc.3.1" expl="postcondition">
+   <transf name="split_vc" >
+    <goal name="find_min&#39;vc.3.1.0" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.05" steps="6661"/></proof>
+    </goal>
+    <goal name="find_min&#39;vc.3.1.1" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.09" steps="12420"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="find_min&#39;vc.3.2" expl="postcondition">
+   <transf name="split_vc" >
+    <goal name="find_min&#39;vc.3.2.0" expl="postcondition">
+    <transf name="split_vc" >
+     <goal name="find_min&#39;vc.3.2.0.0" expl="postcondition">
+     <proof prover="0" obsolete="true"><result status="valid" time="0.00" steps="10"/></proof>
+     <proof prover="1" obsolete="true"><result status="highfailure" time="24.77" steps="33183858"/></proof>
+     <proof prover="2" timelimit="30" memlimit="4000" obsolete="true"><result status="timeout" time="30.00" steps="9487691"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="find_min&#39;vc.3.2.1" expl="postcondition">
+    <transf name="split_vc" >
+     <goal name="find_min&#39;vc.3.2.1.0" expl="postcondition">
+     <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="165"/></proof>
+     <proof prover="1" obsolete="true"><result status="highfailure" time="24.45" steps="37348838"/></proof>
+     <proof prover="2" timelimit="30" memlimit="4000" obsolete="true"><result status="timeout" time="30.00" steps="9655119"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="find_min&#39;vc.3.3" expl="postcondition">
+   <transf name="split_vc" >
+    <goal name="find_min&#39;vc.3.3.0" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.02" steps="6388"/></proof>
+    </goal>
+    <goal name="find_min&#39;vc.3.3.1" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.14" steps="12123"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="find_min&#39;vc.3.4" expl="postcondition">
+   <transf name="split_vc" >
+    <goal name="find_min&#39;vc.3.4.0" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.02" steps="6349"/></proof>
+    </goal>
+    <goal name="find_min&#39;vc.3.4.1" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.19" steps="17402"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="find_min&#39;vc.3.5" expl="postcondition">
+   <transf name="split_vc" >
+    <goal name="find_min&#39;vc.3.5.0" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.02" steps="5909"/></proof>
+    </goal>
+    <goal name="find_min&#39;vc.3.5.1" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.02" steps="11031"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="delete&#39;vc" expl="VC for delete">
+ <proof prover="2" obsolete="true"><result status="valid" time="0.03" steps="8312"/></proof>
+ <transf name="split_vc" >
+  <goal name="delete&#39;vc.0" expl="variant decrease">
+  <proof prover="2" obsolete="true"><result status="valid" time="0.06" steps="6786"/></proof>
+  </goal>
+  <goal name="delete&#39;vc.1" expl="precondition">
+  <transf name="split_vc" >
+   <goal name="delete&#39;vc.1.0" expl="precondition">
+   <proof prover="2" obsolete="true"><result status="valid" time="0.06" steps="6270"/></proof>
+   </goal>
+   <goal name="delete&#39;vc.1.1" expl="precondition">
+   <proof prover="0" obsolete="true"><result status="valid" time="2.42" steps="5816"/></proof>
+   <proof prover="1" timelimit="5" memlimit="2000" obsolete="true"><result status="highfailure" time="4.20" steps="906796"/></proof>
+   <proof prover="2" timelimit="5" memlimit="2000" obsolete="true"><result status="timeout" time="5.00" steps="1449293"/></proof>
+   <transf name="inline_goal" >
+    <goal name="delete&#39;vc.1.1.0" expl="precondition">
+    <transf name="split_all_full" >
+     <goal name="delete&#39;vc.1.1.0.0" expl="precondition">
+     <proof prover="0" obsolete="true"><result status="valid" time="1.61" steps="5735"/></proof>
+     <proof prover="1" timelimit="1" memlimit="1000" obsolete="true"><result status="valid" time="0.12" steps="167917"/></proof>
+     <proof prover="2" obsolete="true"><result status="timeout" time="1.00" steps="77501"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="delete&#39;vc.4.1" expl="precondition">
+   <proof prover="2"><result status="valid" time="0.05" steps="5476"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="delete&#39;vc.2" expl="variant decrease">
+  <proof prover="2" obsolete="true"><result status="valid" time="0.06" steps="6757"/></proof>
+  </goal>
+  <goal name="delete&#39;vc.3" expl="precondition">
+  <transf name="split_vc" >
+   <goal name="delete&#39;vc.3.0" expl="precondition">
+   <proof prover="2" obsolete="true"><result status="valid" time="0.05" steps="5128"/></proof>
+   </goal>
+   <goal name="delete&#39;vc.3.1" expl="precondition">
+   <proof prover="0" obsolete="true"><result status="valid" time="0.64" steps="2044"/></proof>
+   <transf name="inline_goal" >
+    <goal name="delete&#39;vc.3.1.0" expl="precondition">
+    <transf name="split_all_full" >
+     <goal name="delete&#39;vc.3.1.0.0" expl="precondition">
+     <proof prover="0" obsolete="true"><result status="valid" time="0.62" steps="1909"/></proof>
+     <proof prover="1" obsolete="true"><result status="highfailure" time="13.98" steps="973158"/></proof>
+     <proof prover="2" timelimit="30" memlimit="4000" obsolete="true"><result status="timeout" time="30.00" steps="9042774"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="delete&#39;vc.4" expl="precondition">
+  <transf name="split_vc" >
+   <goal name="delete&#39;vc.4.0" expl="precondition">
+   <proof prover="2" obsolete="true"><result status="valid" time="0.05" steps="5104"/></proof>
+   </goal>
+   <goal name="delete&#39;vc.4.1" expl="precondition">
+   <proof prover="2" obsolete="true"><undone/></proof>
+   </goal>
+   <goal name="delete&#39;vc.4.2" expl="precondition">
+   <proof prover="0" obsolete="true"><result status="timeout" time="5.00"/></proof>
+   <proof prover="1" timelimit="5" memlimit="2000" obsolete="true"><result status="timeout" time="5.00" steps="916412"/></proof>
+   <proof prover="2" timelimit="5" memlimit="2000" obsolete="true"><result status="timeout" time="5.00" steps="1682099"/></proof>
+   <transf name="inline_goal" >
+    <goal name="delete&#39;vc.4.2.0" expl="precondition">
+    <proof prover="0" obsolete="true"><result status="timeout" time="5.00"/></proof>
+    <transf name="split_all_full" >
+     <goal name="delete&#39;vc.4.2.0.0" expl="precondition">
+     <proof prover="0" obsolete="true"><result status="timeout" time="5.00"/></proof>
+     <proof prover="1" obsolete="true"><result status="highfailure" time="26.87" steps="50911989"/></proof>
+     <proof prover="2" timelimit="30" memlimit="4000" obsolete="true"><result status="timeout" time="30.00" steps="10031580"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="delete&#39;vc.5" expl="postcondition">
+  <transf name="split_vc" >
+   <goal name="delete&#39;vc.5.0" expl="postcondition">
+   <transf name="split_vc" >
+    <goal name="delete&#39;vc.5.0.0" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.04" steps="4325"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.0.1" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.07" steps="7970"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.0.2" expl="postcondition">
+    <transf name="split_vc" >
+     <goal name="delete&#39;vc.5.0.2.0" expl="postcondition">
+     <proof prover="2" obsolete="true"><result status="valid" time="0.07" steps="7971"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="delete&#39;vc.5.0.3" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.25" steps="21838"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.0.4" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.10" steps="10981"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.0.5" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.17" steps="16405"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.0.6" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.06" steps="6186"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="delete&#39;vc.5.1" expl="postcondition">
+   <transf name="split_vc" >
+    <goal name="delete&#39;vc.5.1.0" expl="postcondition">
+    <transf name="split_vc" >
+     <goal name="delete&#39;vc.5.1.0.0" expl="postcondition">
+     <proof prover="2" obsolete="true"><result status="valid" time="0.03" steps="4301"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="delete&#39;vc.5.1.1" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.05" steps="5962"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.1.2" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.07" steps="7209"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.1.3" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.18" steps="16327"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.1.4" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.15" steps="13818"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.1.5" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.17" steps="15899"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.1.6" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.07" steps="6943"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="delete&#39;vc.5.2" expl="postcondition">
+   <transf name="split_vc" >
+    <goal name="delete&#39;vc.5.2.0" expl="postcondition">
+    <proof prover="1" timelimit="1" memlimit="1000" obsolete="true"><result status="valid" time="0.04" steps="22640"/></proof>
+    <proof prover="2" obsolete="true"><result status="timeout" time="1.00" steps="178375"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.2.1" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.12" steps="12042"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.2.2" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.12" steps="12242"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.2.3" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.05" steps="5687"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.2.4" expl="postcondition">
+    <transf name="split_vc" >
+     <goal name="delete&#39;vc.5.2.4.0" expl="postcondition">
+     <proof prover="2" obsolete="true"><result status="valid" time="0.06" steps="6535"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="delete&#39;vc.5.2.5" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.28" steps="25151"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.2.6" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.12" steps="13551"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="delete&#39;vc.5.3" expl="postcondition">
+   <transf name="split_vc" >
+    <goal name="delete&#39;vc.5.3.0" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.03" steps="4217"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.3.1" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.03" steps="4307"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.3.2" expl="postcondition">
+    <proof prover="0" obsolete="true"><result status="valid" time="0.01" steps="14"/></proof>
+    <proof prover="1" obsolete="true"><result status="highfailure" time="24.95" steps="29298526"/></proof>
+    <proof prover="2" timelimit="30" memlimit="4000" obsolete="true"><result status="timeout" time="30.00" steps="9493396"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.3.3" expl="postcondition">
+    <proof prover="2" obsolete="true"><result status="valid" time="0.07" steps="7759"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.3.4" expl="postcondition">
+    <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="271"/></proof>
+    <proof prover="1" timelimit="1" memlimit="1000" obsolete="true"><result status="timeout" time="1.00" steps="931770"/></proof>
+    <proof prover="2" obsolete="true"><result status="timeout" time="1.00" steps="84049"/></proof>
+    <transf name="split_vc" >
+     <goal name="delete&#39;vc.5.3.4.0" expl="postcondition">
+     <proof prover="0" obsolete="true"><result status="valid" time="0.01" steps="14"/></proof>
+     <proof prover="1" obsolete="true"><result status="highfailure" time="26.51" steps="37147795"/></proof>
+     <proof prover="2" timelimit="30" memlimit="4000" obsolete="true"><result status="timeout" time="30.00" steps="7496626"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="delete&#39;vc.5.3.5" expl="postcondition">
+    <proof prover="0" obsolete="true"><result status="valid" time="0.01" steps="14"/></proof>
+    <proof prover="1" obsolete="true"><result status="timeout" time="30.00" steps="54903074"/></proof>
+    <proof prover="2" obsolete="true"><result status="valid" time="0.07" steps="7770"/></proof>
+    </goal>
+    <goal name="delete&#39;vc.5.3.6" expl="postcondition">
+    <proof prover="0" obsolete="true"><result status="valid" time="0.03" steps="271"/></proof>
+    <proof prover="1" timelimit="1" memlimit="1000" obsolete="true"><result status="timeout" time="1.00" steps="929537"/></proof>
+    <proof prover="2" obsolete="true"><result status="timeout" time="1.00" steps="86932"/></proof>
+    <transf name="split_vc" >
+     <goal name="delete&#39;vc.5.3.6.0" expl="postcondition">
+     <proof prover="1" obsolete="true"><result status="highfailure" time="14.76" steps="963003"/></proof>
+     <proof prover="2" timelimit="30" memlimit="4000" obsolete="true"><result status="timeout" time="30.00" steps="9490512"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
    </goal>
   </transf>
   </goal>
