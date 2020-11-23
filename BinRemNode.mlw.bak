@@ -1,13 +1,13 @@
 module BinRemNode
 
 use int.Int
-use binTree.Tree
-use binTree.Occ
-use binTree.Size
+use bintree.Tree
+use bintree.Occ
+use bintree.Size
 use option.Option
 
 predicate binsearch (t:tree int) =
-match t with 
+match t with
 |Empty -> true
 |Node a b c -> (forall i: int. mem i a -> i<=b) /\ (forall j: int. mem j c -> j > b)
                 /\ binsearch a /\ binsearch c
@@ -15,53 +15,89 @@ end
 
 predicate is_minimum (x: int) (t: tree int) =
   mem x t /\ forall e. mem e t -> x <= e
-  
 
-let rec function min (t: tree int) : int 
+
+let rec function min (t: tree int) : int
     variant{t}
     requires{t <> Empty /\ binsearch t}
-    ensures {is_minimum result t}
+    (* ensures {is_minimum result t} *)
     = match t with
     | Empty -> absurd
     | Node Empty a _ -> a
-    | Node l a _ -> min l
+    | Node l _ _ -> min l
     end
 
+let rec lemma is_minimum_min (t: tree int) : unit
+  requires { binsearch t /\ t <> Empty }
+  variant  { t }
+  ensures  { is_minimum (min t) t }
+= match t with
+  | Empty -> absurd
+  | Node Empty _ _ -> ()
+  | Node l _ _ -> is_minimum_min l
+  end
 
-(*lemma is_minimum_min: forall t. binsearch t /\ t<> Empty -> is_minimum (min t) t*)
+(* Prova da propriedade P = forall t. binsearch t -> t <> Empty -> is_minimum (min t) t *)
 
-(*let rec find_min (t: tree int): (x: int, y: tree int)
+(* por ind. de P sobre t: *)
+(*   * caso (base) t = Empty -> vacuoso (nada a provar) *)
+(*     P (Empty) = binsearch Empty -> Empty <> Empty -> *)
+(*                 is_minimum (min Empty) Empty *)
+
+(*     binsearch Empty *)
+(*     Empty <> Empty = false *)
+(*     ================ *)
+(*     Goal: is_minimum (min Empty) Empty *)
+
+(*   * caso (indutivo) t = Node l v r *)
+(*       Hip ind. (1) = P(l) = binsearch l -> l <> Empty -> is_minimum (min l) l *)
+(*       Hip ind. (2) = P(r) = binsearch r -> r <> Empty -> is_minimum (min r) r *)
+
+(*       Objectivo: provar P (Node l v r), sabendo (1) e (2) *)
+
+(*     * sub-caso l = Empty -> trivial (por definição de min e is_minimum) *)
+(*       P (Node Empty v r) = binsearch (Node Empty v r) -> Node ... <> Empty -> *)
+(*             is_minimum (min Node ...) Node ... *)
+
+(*       min (Node Empty v r) = v *)
+(*       ======================== *)
+(*       Goal: is_minimum v == mem v (Node Empty v r) /\ forall e. mem e t -> v <= e *)
+
+(*     * sub-caso l <> Empty -> *)
+(*       . por (1) e (min t) = (min l) : *)
+
+(*         ==================================== *)
+(*         mem (min l) t /\ forall e. mem e t -> (min l) <= e ((min l) <= v /\ *)
+(*         forall x. mem x r -> v <= x ===> (min l) <= x) *)
+
+let rec find_min (t: tree int): (x: int, y: tree int)
 variant {t}
 requires {binsearch t /\ t <> Empty /\ forall j: int. occ j t <= 1}
-ensures {(*forall i : int. mem i t -> i >= x /\ mem x t /\ binsearch y 
-        /\ (forall j : int. mem j t /\ j <> x -> mem j y) 
+ensures {(*forall i : int. mem i t -> i >= x /\ mem x t /\ binsearch y
+        /\ (forall j : int. mem j t /\ j <> x -> mem j y)
         /\ (forall z : int. mem z y -> mem z t) /\ not mem x y /\*)
         x = min t}
 = match t with
 | Empty -> absurd
 | Node Empty x r -> (x, r)
 | Node l a b -> let x,y = find_min l in (x, (Node y a b))
-end*)
+end
 
 let rec delete (t: tree int) (x:int): (tree int)
 requires {binsearch t /\ forall j: int. occ j t <= 1}
 variant {t}
-ensures {(forall j : int. mem j t /\ j <> x -> mem j result) 
-        /\ (forall i:int. mem i result -> mem i t) /\ not mem x result 
+ensures {(forall j : int. mem j t /\ j <> x -> mem j result)
+        /\ (forall i:int. mem i result -> mem i t) /\ not mem x result
         /\ binsearch result}
-= 
-match t with 
+=
+match t with
 | Empty -> Empty
-| Node l y r ->  if x < y then Node (delete l x) y r else 
+| Node l y r ->  if x < y then Node (delete l x) y r else
                 if x > y then Node l y (delete r x) else
                 match l, r with
                 |Empty, _ -> r
                 |_, Empty -> l
-                |l', r' -> let mini = min r' in Node l' mini (delete r' mini)
-               end 
+                |l', r' -> let (mini, x') = find_min r' in Node l' mini (x')
+               end
 end
 end
-
-
- 
-
