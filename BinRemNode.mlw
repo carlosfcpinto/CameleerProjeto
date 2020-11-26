@@ -73,10 +73,9 @@ let rec lemma is_minimum_min (t: tree int) : unit
 let rec find_min (t: tree int): (x: int, y: tree int)
 variant {t}
 requires {binsearch t /\ t <> Empty /\ forall j: int. occ j t <= 1}
-ensures {binsearch y
-        /\ (forall j : int. mem j t /\ j <> x -> mem j y)
-        /\ (forall z : int. mem z y -> mem z t) /\ not mem x y /\
-        x = min t}
+ensures {binsearch y /\ (forall j: int. occ j y <= 1)
+        /\ (forall j. j <> x -> occ j t = occ j y) /\ not mem x y
+        /\ x = min t}
 = match t with
 | Empty -> absurd
 | Node Empty x r -> (x, r)
@@ -86,18 +85,19 @@ end
 let rec delete (t: tree int) (x:int): (tree int)
 requires {binsearch t /\ forall j: int. occ j t <= 1}
 variant {t}
-ensures {(forall j : int. mem j t /\ j <> x -> mem j result)
-        /\ (forall i:int. mem i result -> mem i t) /\ not mem x result
-        /\ binsearch result}
+ensures {(forall j : int. j <> x -> occ j t = occ j result)
+        /\ not mem x result
+        /\ binsearch result /\ (forall j: int. occ j t <= 1) }
 =
 match t with
 | Empty -> Empty
 | Node l y r ->  if x < y then Node (delete l x) y r else
-                if x > y then Node l y (delete r x) else
+                if x > y then Node l y (delete r x) else begin
+                assert { x = y };
                 match l, r with
                 |Empty, _ -> r
                 |_, Empty -> l
-                |l', r' -> let (mini, x') = find_min r' in Node l' mini (x')
+                |l', r' -> let (mini, x') = find_min r' in Node l' mini (x') end
                end
 end
 end
