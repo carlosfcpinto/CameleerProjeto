@@ -13,8 +13,6 @@ match t with
                 /\ binsearch a /\ binsearch c
 end
 
-predicate is_minimum (x: int) (t: tree int) =
-  mem x t /\ forall e. mem e t -> x <= e
 
 let rec insert (t: tree int) (x:int): (tree int)
 requires {binsearch t /\ forall j: int. occ j t <= 1}
