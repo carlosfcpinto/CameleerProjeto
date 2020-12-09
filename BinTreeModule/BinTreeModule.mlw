@@ -1,0 +1,158 @@
+module Comparable
+use int.Int
+ type t
+  val predicate le t t
+  clone relations.TotalPreOrder with
+    type t = t, predicate rel = le, axiom .
+    
+  val compare (a:t) (b:t): int
+    ensures {result > 0 -> le b a /\ not le a b}
+    ensures {result < 0 -> le a b /\ not le b a}
+    ensures {result = 0 -> a = b}
+
+end
+
+module S
+
+  use Comparable
+  use int.Int
+  use bintree.Tree
+  use bintree.Occ
+  use bintree.Size
+  
+  type elt = Comparable.t
+  
+  predicate binsearch (t:tree elt) =
+    match t with
+      |Empty -> true
+      |Node a b c -> (forall i: elt. mem i a -> le i b) /\ (forall j: elt. mem j c -> (le j b /\ not le b j))
+                      /\ binsearch a /\ binsearch c
+    end
+   
+  
+  val find (t:tree elt) (e:elt) : bool
+    requires {binsearch t}
+    ensures{result <-> mem e t}
+  val insert (t: tree elt) (e: elt) : tree elt
+    requires {binsearch t}
+    ensures {mem e result}
+    ensures {forall y. y <> e -> occ y t = occ y result }
+    ensures {size result = size t + 1 }
+  val delete (t : tree elt) (e: elt) : tree elt
+    requires {binsearch t}
+    ensures{not mem e result}
+end
+
+
+
+
+
+module BinTree 
+  use Comparable
+  use int.Int
+  use bintree.Tree
+  use bintree.Occ
+  use bintree.Size
+  
+  type elt = Comparable.t
+  type t = tree elt
+  
+  predicate binsearch (tree:t) =
+    match tree with
+      |Empty -> true
+      |Node a b c -> (forall i: elt. mem i a -> le i b) /\ (forall j: elt. mem j c -> (le j b /\ not le b j))
+                      /\ binsearch a /\ binsearch c
+    end
+   
+  
+  let rec find (tree: t) (b: elt): bool 
+  requires {binsearch tree}
+  variant{tree}
+  ensures{result = mem b tree}
+  = match tree with
+      |Empty -> false
+      |Node l x r -> let z = compare x b in
+                      if (z = 0) then true else
+                      if (z < 0) then find r b else find l b
+      end
+    
+  let rec insert (tree: t) (x: elt) : t 
+  requires {binsearch tree /\ forall j. occ j tree <= 1}
+  variant {tree}
+  ensures {(forall j: elt. mem j tree -> mem j result)
+          /\ mem x result 
+          /\ (forall j: elt. occ j result <= 1)
+          /\ (forall j: elt. j <> x -> occ j tree = occ j result)
+          /\ binsearch result}
+  = match tree with
+        |Empty -> Node Empty x Empty
+        |Node l y r-> let z = compare x y in
+                        if z < 0 then Node (insert l x) y r else
+                        if z > 0 then Node l y (insert r x)
+                        else begin
+                        assert {le x y /\ le y x};
+                        Node l y r
+                        end
+           end
+           
+           
+           
+  predicate is_minimum (x: elt) (tree: t) =
+  mem x tree /\ forall e: elt. mem e tree -> le x e
+
+
+  let rec function min (tree: t) : elt
+    variant{tree}
+    requires{tree <> Empty /\ binsearch tree}
+    ensures {is_minimum result tree}
+    = match tree with
+    | Empty -> absurd
+    | Node Empty a _ -> a
+    | Node l _ _ -> min l
+    end
+
+  (*let rec lemma is_minimum_min (tree: t) : unit
+  requires { binsearch tree /\ tree <> Empty }
+  variant  { tree }
+  ensures  { is_minimum (min tree) tree }
+  = match tree with
+  | Empty -> absurd
+  | Node Empty _ _ -> ()
+  | Node l _ _ -> is_minimum_min l
+  end*)
+
+  let rec find_min (tree: t): (x: elt, y: t) 
+  variant {tree}
+  requires {binsearch tree /\ tree <> Empty /\ forall j: elt. occ j tree <= 1}
+  ensures {binsearch y /\ (forall j: elt. occ j y <= 1)
+        /\ (forall j: elt. j <> x -> occ j tree = occ j y) /\ not mem x y
+        /\ x = min tree}
+  =
+    match tree with
+        | Empty -> absurd
+        | Node Empty x r -> (x, r)
+        | Node l a b -> let x,y = find_min l in (x, (Node y a  b))
+        end
+    
+  let rec delete (tree: t) (x: elt) : t 
+  requires {binsearch tree /\ forall j: elt. occ j tree <= 1}
+  variant {tree}
+  ensures {(forall j : elt. (not (le j x /\ le x j)) -> occ j tree = occ j result)
+            /\ not mem x result
+            /\ binsearch result /\ (forall j: elt. occ j tree <= 1) }
+        = match tree with
+        |Empty -> Empty
+        |Node l y r-> let z = compare x y in
+                        if z < 0 then Node (delete l x) y r else
+                        if z > 0 then Node l y (delete r x) else begin
+                        assert {le x y /\ le y x};
+                        match l, r with
+                          |Empty, _ -> r
+                          |_, Empty -> l
+                          |l', r' -> let (min, x') = find_min r' in Node l' min x' end
+                        end
+         end
+  
+end
+
+

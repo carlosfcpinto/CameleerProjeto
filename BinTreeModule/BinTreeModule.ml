@@ -20,16 +20,18 @@ module BinTree(TreeNode : Comparable) =
 
     let rec find tree b = 
     match tree with
-      |Node (l,a,r)-> if (a=b) then true else
-                      if (a < b) then find r b else find r b
+      |Node (l,a,r)-> let z = TreeNode.compare a b in
+                      if (z = 0) then true else
+                      if (z < 0) then find r b else find r b
       |Empty -> false
     
     let rec insert tree x =
       match tree with
         |Empty -> Node (Empty,x,Empty)
-        |Node (l,y,r) -> if y > x then Node ((insert l x),y,r) else
-                      if y < x then Node (l, y, (insert r x))
-                      else Node (l,y,r)
+        |Node (l,y,r)-> let z = TreeNode.compare x y in
+                        if z < 0 then Node ((insert l x),y,r) else
+                        if z > 0 then Node (l, y, (insert r x))
+                        else Node (l,y,r)
 
     let rec find_min tree =
       match tree with
@@ -40,11 +42,20 @@ module BinTree(TreeNode : Comparable) =
     let rec delete tree x = 
       match tree with
         |Empty -> Empty
-        |Node (l,y,r) ->  if x < y then Node ((delete l x),y,r) else
-                if x > y then Node (l ,y ,(delete r x)) else 
-                  match l, r with
-                  |Empty, _ -> r
-                  |_, Empty -> l
-                  |l', r' -> let (min, x') = find_min r' in Node (l',min,(x')) 
+        |Node (l,y,r)-> let z = TreeNode.compare x y in
+                        if z < 0 then Node ((delete l x),y,r) else
+                        if z > 0 then Node (l ,y ,(delete r x)) else 
+                        match l, r with
+                          |Empty, _ -> r
+                          |_, Empty -> l
+                          |l', r' -> let (min, x') = find_min r' in Node (l',min,(x')) 
   
 end
+
+
+let x = 12
+module Tx = BinTree(Int)
+let t = Tx.insert Empty x
+let t = Tx.delete t x
+let () = if (Tx.find t 0) then () else assert false
+
