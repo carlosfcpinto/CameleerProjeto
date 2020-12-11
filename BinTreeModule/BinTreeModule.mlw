@@ -2,30 +2,31 @@ module Comparable
 use int.Int
  type t
   val predicate le t t
-  clone relations.TotalOrder with
+  clone relations.TotalStrictOrder with
     type t = t, predicate rel = le, axiom .
     
   val compare (a:t) (b:t): int
-    ensures {result > 0 -> le b a /\ not le a b}
-    ensures {result < 0 -> le a b /\ not le b a}
+    ensures {result > 0 -> le b a}
+    ensures {result < 0 -> le a b}
     ensures {result = 0 -> a = b}
 
 end
 
 module S
 
-  use Comparable
   use int.Int
   use bintree.Tree
   use bintree.Occ
   use bintree.Size
+  clone Comparable with axiom .
   
   type elt = Comparable.t
   
-  predicate binsearch (t:tree elt) =
+  predicate binsearch (t:tree elt) 
+    axiom binsearch_def: forall t. binsearch t <-> 
     match t with
       |Empty -> true
-      |Node a b c -> (forall i: elt. mem i a -> le i b) /\ (forall j: elt. mem j c -> (le b j /\ not le j b))
+      |Node a b c -> (forall i: elt. mem i a -> le i b \/ i = b) /\ (forall j: elt. mem j c -> (le b j))
                       /\ binsearch a /\ binsearch c
     end
    
@@ -34,13 +35,14 @@ module S
     requires {binsearch t}
     ensures{result <-> mem e t}
   val insert (t: tree elt) (e: elt) : tree elt
-    requires {binsearch t}
+    requires {binsearch t /\ forall x. occ x t <= 1}
     ensures {mem e result}
-    ensures {forall y. y <> e -> occ y t = occ y result }
-    ensures {size result = size t + 1 }
+    ensures {forall y. y <> e -> occ y t = occ y result}
+    ensures {binsearch result /\ forall j. occ j result <= 1}
   val delete (t : tree elt) (e: elt) : tree elt
-    requires {binsearch t}
+    requires {binsearch t /\ forall x. occ x t <= 1}
     ensures{not mem e result}
+    ensures{binsearch result /\ forall j. occ j result <= 1}
 end
 
 
@@ -48,11 +50,11 @@ end
 
 
 module BinTree 
-  use Comparable
   use int.Int
   use bintree.Tree
   use bintree.Occ
   use bintree.Size
+  clone Comparable with axiom .  
   
   type elt = Comparable.t
   type t = tree elt
@@ -60,7 +62,7 @@ module BinTree
   predicate binsearch (tree:t) =
     match tree with
       |Empty -> true
-      |Node a b c -> (forall i: elt. mem i a -> le i b) /\ (forall j: elt. mem j c -> (le b j /\ not le j b))
+      |Node a b c -> (forall i: elt. mem i a -> le i b \/ i = b) /\ (forall j: elt. mem j c -> (le b j))
                       /\ binsearch a /\ binsearch c
     end
    
@@ -98,7 +100,7 @@ module BinTree
            
            
   predicate is_minimum (x: elt) (tree: t) =
-  mem x tree /\ forall e: elt. mem e tree -> le x e
+  mem x tree /\ forall e: elt. mem e tree -> le x e \/ e = x
 
 
   let rec function min (tree: t) : elt
@@ -156,3 +158,60 @@ module BinTree
 end
 
 
+module Test
+
+use int.Int
+use bintree.Tree
+let compare (x:int) (y:int): int
+  ensures {if x<y then result < 0 else if x>y then result > 0 else result = 0}
+  =if x < y then -1 else if x > y then 1 else 0  
+clone BinTree with type Comparable.t = int, val Comparable.le = (<), val Comparable.compare = compare
+
+let main () = 
+  let t = Empty in
+  let t = BinTree.insert t 42 in
+  let t = BinTree.insert t 1749 in
+  let t = BinTree.insert t 73 in
+  let b = BinTree.find t 42 in
+  assert {b};
+  assert {BinTree.min t = 42};
+  let t = BinTree.delete t 42 in
+  let b = BinTree.find t 42 in
+  assert{not b}
+  
+  
+
+end
+
+
+module Correct 
+
+use BinTree, bintree.Tree, bintree.Occ,  int.Int
+clone import S as S with val insert, val delete, val find, type Comparable.t = BinTree.Comparable.t, 
+                    val Comparable.le = BinTree.Comparable.le, val Comparable.compare = BinTree.Comparable.compare,
+                    predicate binsearch, goal binsearch_def,  axiom .
+let compare (x:int) (y:int): int
+  ensures {if x<y then result < 0 else if x>y then result > 0 else result = 0}
+  =if x < y then -1 else if x > y then 1 else 0  
+  
+predicate binsearch2 (t: tree S.elt)
+    axiom binsearch_def: forall t. binsearch t <-> 
+    match t with
+      |Empty -> true
+      |Node a b c -> (forall i: elt. mem i a -> BinTree.Comparable.le i b \/ i = b) /\ (forall j: elt. mem j c -> (BinTree.Comparable.le b j))
+                      /\ binsearch a /\ binsearch c
+    end
+clone import S as TreeInt with type Comparable.t = int, val Comparable.le = (<), val Comparable.compare = compare(*, predicate binsearch = binsearch2*), axiom .
+
+let main () = 
+  let t = Empty in
+  let t = insert t 42 in
+  let t = insert t 1749 in
+  let t = insert t 73 in
+  let b = find t 42 in
+  assert {b};
+  (*assert {BinTree.min t = 42};*) 
+  let t = delete t 42 in
+  let b = find t 42 in
+  assert{not b}
+end
