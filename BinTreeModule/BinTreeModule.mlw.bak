@@ -25,7 +25,7 @@ module S
   predicate binsearch (t:tree elt) =
     match t with
       |Empty -> true
-      |Node a b c -> (forall i: elt. mem i a -> le i b) /\ (forall j: elt. mem j c -> (le j b /\ not le b j))
+      |Node a b c -> (forall i: elt. mem i a -> le i b) /\ (forall j: elt. mem j c -> (le b j /\ not le j b))
                       /\ binsearch a /\ binsearch c
     end
    
@@ -60,7 +60,7 @@ module BinTree
   predicate binsearch (tree:t) =
     match tree with
       |Empty -> true
-      |Node a b c -> (forall i: elt. mem i a -> le i b) /\ (forall j: elt. mem j c -> (le j b /\ not le b j))
+      |Node a b c -> (forall i: elt. mem i a -> le i b) /\ (forall j: elt. mem j c -> (le b j /\ not le j b))
                       /\ binsearch a /\ binsearch c
     end
    
@@ -90,7 +90,7 @@ module BinTree
                         if z < 0 then Node (insert l x) y r else
                         if z > 0 then Node l y (insert r x)
                         else begin
-                        assert {le x y /\ le y x};
+                        assert {x=y};
                         Node l y r
                         end
            end
@@ -104,7 +104,7 @@ module BinTree
   let rec function min (tree: t) : elt
     variant{tree}
     requires{tree <> Empty /\ binsearch tree}
-    (*ensures {is_minimum result tree}*)
+    ensures {is_minimum result tree}
     = match tree with
     | Empty -> absurd
     | Node Empty a _ -> a
@@ -137,7 +137,7 @@ module BinTree
   let rec delete (tree: t) (x: elt) : t 
   requires {binsearch tree /\ forall j: elt. occ j tree <= 1}
   variant {tree}
-  ensures {(forall j : elt. (not (le j x /\ le x j)) -> occ j tree = occ j result)
+  ensures {(forall j : elt. (x<>j) -> occ j tree = occ j result)
             /\ not mem x result
             /\ binsearch result /\ (forall j: elt. occ j tree <= 1) }
         = match tree with
@@ -145,7 +145,7 @@ module BinTree
         |Node l y r-> let z = compare x y in
                         if z < 0 then Node (delete l x) y r else
                         if z > 0 then Node l y (delete r x) else begin
-                        assert {le x y /\ le y x};
+                        assert {y = x};
                         match l, r with
                           |Empty, _ -> r
                           |_, Empty -> l

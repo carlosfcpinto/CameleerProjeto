@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.3.3" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.7" alternative="counterexamples" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="2" name="CVC4" version="1.7" timelimit="5" steplimit="0" memlimit="1000"/>
+<file format="whyml">
+<path name=".."/><path name="BinTreeModule.mlw"/>
+<theory name="BinTree">
+ <goal name="find&#39;vc" expl="VC for find">
+ </goal>
+ <goal name="insert&#39;vc" expl="VC for insert">
+ </goal>
+ <goal name="min&#39;vc" expl="VC for min">
+ <proof prover="1" obsolete="true"><result status="timeout" time="1.00" steps="168258"/></proof>
+ <transf name="split_vc" >
+  <goal name="min&#39;vc.0" expl="unreachable point" proved="true">
+  <proof prover="0"><result status="valid" time="0.01" steps="6"/></proof>
+  </goal>
+  <goal name="min&#39;vc.1" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.01" steps="16"/></proof>
+  </goal>
+  <goal name="min&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.01" steps="11"/></proof>
+  </goal>
+  <goal name="min&#39;vc.3" expl="postcondition">
+  <proof prover="0"><result status="timeout" time="5.00"/></proof>
+  <proof prover="2"><result status="timeout" time="5.00" steps="523253"/></proof>
+  <transf name="split_vc" >
+   <goal name="min&#39;vc.3.0" expl="postcondition">
+   </goal>
+   <goal name="min&#39;vc.3.1" expl="postcondition">
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="find_min&#39;vc" expl="VC for find_min">
+ <transf name="split_vc" >
+  <goal name="find_min&#39;vc.0" expl="unreachable point" proved="true">
+  <proof prover="0"><result status="valid" time="0.00" steps="6"/></proof>
+  </goal>
+  <goal name="find_min&#39;vc.1" expl="variant decrease" proved="true">
+  <proof prover="0"><result status="valid" time="0.01" steps="16"/></proof>
+  </goal>
+  <goal name="find_min&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="0"><result status="timeout" time="5.00"/></proof>
+  <proof prover="2"><result status="valid" time="0.67" steps="87268"/></proof>
+  </goal>
+  <goal name="find_min&#39;vc.3" expl="postcondition">
+  <proof prover="0"><result status="timeout" time="5.00"/></proof>
+  <proof prover="2"><result status="unknown" time="0.08" steps="11830"/></proof>
+  <transf name="split_vc" >
+   <goal name="find_min&#39;vc.3.0" expl="postcondition" proved="true">
+   <proof prover="0"><result status="valid" time="3.71" steps="10435"/></proof>
+   </goal>
+   <goal name="find_min&#39;vc.3.1" expl="postcondition">
+   <proof prover="0"><result status="timeout" time="5.00"/></proof>
+   <proof prover="2"><result status="timeout" time="5.00" steps="592907"/></proof>
+   </goal>
+   <goal name="find_min&#39;vc.3.2" expl="postcondition">
+   <proof prover="0"><result status="timeout" time="5.00"/></proof>
+   <proof prover="2"><result status="timeout" time="5.00" steps="588664"/></proof>
+   </goal>
+   <goal name="find_min&#39;vc.3.3" expl="postcondition">
+   <proof prover="0"><result status="timeout" time="5.00"/></proof>
+   <proof prover="2"><result status="timeout" time="5.00" steps="510336"/></proof>
+   </goal>
+   <goal name="find_min&#39;vc.3.4" expl="postcondition">
+   <proof prover="0"><result status="timeout" time="5.00"/></proof>
+   <proof prover="2"><result status="timeout" time="5.00" steps="652342"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="delete&#39;vc" expl="VC for delete">
+ </goal>
+</theory>
+</file>
+</why3session>
